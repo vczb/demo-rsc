@@ -17,17 +17,17 @@ const MIME_TYPES = {
 };
 
 const router = async (url: string) => {
-  switch (url) {
-    case '/':
-      // @ts-ignore
-      const Page = await import('./build/page.js');
-      const html = renderToString(Page.default());
-      // const html = renderToString(createElement(Page.default()));
-      return html
-    case '/about':
-      return '<html><body><h1>About Us</h1></body></html>';
-    default:
-      return null;
+
+ const filePath = `./build/pages/${url}/page.js`.replace('//', '/');
+
+  try {
+    // @ts-ignore
+    const Page = await import(filePath)
+    const element = createElement(Page.default);
+    const html = renderToString(element);
+    return html
+  } catch {
+    return null
   }
 }
 
