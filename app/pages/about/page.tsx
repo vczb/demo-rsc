@@ -1,7 +1,6 @@
 import React from 'react';
+import Hello from '../../components/Hello';
 
 export default function Page(){
-  return (
-    <h1>About Page</h1>
-  )
+  return <Hello value='About' />
 }
