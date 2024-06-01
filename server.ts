@@ -26,24 +26,32 @@ const router = async (url: string) => {
     const Page = await import(filePath)
     const element = createElement(Page.default);
     const stream = await renderToReadableStream(element, clientComponentMap);
-    return new Response(stream, {
-      headers: { 'content-type': 'text/html' },
-    });
+    return {
+      status: 200,
+      response: new Response(stream, {
+        headers: { 'content-type': 'text/html' },
+      })
+    }
   } catch (e) {
     console.error(e);
-    return null;
+    // @ts-ignore
+    const status = e.message.includes('Cannot find module') ? 404 : 500
+    return {
+      status,
+      response: null
+    };
   }
 };
 
 http.createServer(async (req, res) => {
   if (!req.url) return;
 
-  const routeResponse = await router(req.url);
+  const  { response, status } = await router(req.url);
 
-  if (routeResponse !== null) {
-    res.writeHead(200, { "Content-Type": MIME_TYPES.html });
+  if (response !== null) {
+    res.writeHead(status, { "Content-Type": MIME_TYPES.html });
 
-    const readableStream = routeResponse.body as ReadableStream;
+    const readableStream = response.body as ReadableStream;
     const reader = readableStream.getReader();
 
     const streamToResponse = async () => {
@@ -58,8 +66,9 @@ http.createServer(async (req, res) => {
 
     streamToResponse();
   } else {
-    res.writeHead(404, { "Content-Type": MIME_TYPES.html });
-    res.end('Not found!');
+    res.writeHead(status, { "Content-Type": MIME_TYPES.html });
+    const message = status === 404 ? 'Page Not Found!' : 'Internal Server Error =/'
+    res.end(message);
   }
 }).listen(PORT);
 
