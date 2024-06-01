@@ -17,7 +17,7 @@
 2. Install
    `npm install`
 
-3. Execute typescript watch mode ( used as a bunlder )
+3. Execute typescript watch mode ( used as a bundler )
    `npm run watch`
 
 4. Execute NodeJS server
