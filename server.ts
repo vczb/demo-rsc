@@ -2,7 +2,7 @@ import * as http from "node:http";
 
 
 import { PORT } from "./core/constants";
-import { clientRoute } from "./core/client-route";
+import { appRoute } from "./core/app-route";
 import { staticFiles } from "./core/static-files";
 
 
@@ -16,7 +16,7 @@ http.createServer(async (req, res) => {
   if (isStatic.test(url)) {
     await staticFiles(url, res);
   } else {
-    await clientRoute(url, res);
+    await appRoute(url, res);
   }
   
 }).listen(PORT);

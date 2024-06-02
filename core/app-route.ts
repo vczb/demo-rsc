@@ -30,7 +30,7 @@ const router = async (url: string) => {
   }
 };
 
-export const clientRoute = async (url: string, res: HTTP['res']) => {
+export const appRoute = async (url: string, res: HTTP['res']) => {
 
   const  { response, status } = await router(url);
 
