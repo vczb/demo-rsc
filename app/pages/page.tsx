@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import Hello from '../components/Hello';
 import Wrapper from '../components/Wrapper';
 
 export default function Page(){
   return <Wrapper>
-   <Hello value='Index' />
+    <Suspense fallback={<div>Loading...</div>}>
+      <Hello value='Home page' />
+    </Suspense>
   </Wrapper>
 }
